@@ -6,22 +6,32 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zyaire.constants.SystemConstants;
 import com.zyaire.domain.ResponseResult;
 import com.zyaire.domain.entity.Article;
+import com.zyaire.domain.entity.Category;
+import com.zyaire.domain.vo.ArticleDetailVo;
+import com.zyaire.domain.vo.ArticleListVo;
 import com.zyaire.domain.vo.HotArticleVo;
+import com.zyaire.domain.vo.PageVo;
 import com.zyaire.mapper.ArticleMapper;
 import com.zyaire.service.ArticleService;
+import com.zyaire.service.CategoryService;
 import com.zyaire.utils.BeanCopyUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
 
+    @Autowired
+    private CategoryService categoryService;
+
     // 查询热门文章
     @Override
-    public ResponseResult hostArticleList() {
+    public ResponseResult hotArticleList() {
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Article::getStatus, SystemConstants.ARTICLE_STATUS_NORMAL);
         queryWrapper.orderByDesc(Article::getViewCount);
@@ -40,5 +50,40 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         List<HotArticleVo> vs = BeanCopyUtils.copyBeanList(articles, HotArticleVo.class);
         return ResponseResult.okResult(vs);
+    }
+
+    @Override
+    public ResponseResult articleList(Integer pageNum, Integer pageSize, Integer categoryId) {
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Objects.nonNull(categoryId) && categoryId > 0, Article::getCategoryId, categoryId);
+        queryWrapper.eq(Article::getStatus, SystemConstants.ARTICLE_STATUS_NORMAL);
+        queryWrapper.orderByDesc(Article::getIsTop);
+
+        Page<Article> page = new Page<>(pageNum, pageSize);
+        page(page, queryWrapper);
+
+        List<Article> articles = page.getRecords();
+        for (Article article : articles) {
+            Category byId = categoryService.getById(article.getCategoryId());
+            article.setCategoryName(byId.getName());
+        }
+
+        List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(page.getRecords(), ArticleListVo.class);
+        PageVo pageVo = new PageVo(articleListVos, page.getTotal());
+
+        return ResponseResult.okResult(pageVo);
+    }
+
+    @Override
+    public ResponseResult getArticleDetail(Long id) {
+        Article article = getById(id);
+        ArticleDetailVo articleDetailVo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
+        Long categoryId = articleDetailVo.getCategoryId();
+        Category byId = categoryService.getById(categoryId);
+        if (byId != null){
+            articleDetailVo.setCategoryName(byId.getName());
+        }
+
+        return ResponseResult.okResult(articleDetailVo);
     }
 }

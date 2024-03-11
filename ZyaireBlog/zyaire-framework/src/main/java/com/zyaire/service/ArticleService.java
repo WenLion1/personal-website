@@ -5,5 +5,9 @@ import com.zyaire.domain.ResponseResult;
 import com.zyaire.domain.entity.Article;
 
 public interface ArticleService extends IService<Article> {
-    ResponseResult hostArticleList();
+    ResponseResult hotArticleList();
+
+    ResponseResult articleList(Integer pageNum, Integer pageSize, Integer categoryId);
+
+    ResponseResult getArticleDetail(Long id);
 }
