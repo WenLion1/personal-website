@@ -6,6 +6,7 @@ import com.zyaire.domain.ResponseResult;
 import com.zyaire.domain.entity.LoginUser;
 import com.zyaire.domain.vo.CommentVo;
 import com.zyaire.domain.vo.PageVo;
+import com.zyaire.exception.SystemException;
 import com.zyaire.mapper.CommentMapper;
 import com.zyaire.service.UserService;
 import com.zyaire.utils.BeanCopyUtils;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.zyaire.domain.entity.Comment;
 import com.zyaire.service.CommentService;
+import org.springframework.util.StringUtils;
+import com.zyaire.enums.AppHttpCodeEnum;
 
 import java.util.List;
 
@@ -50,7 +53,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Override
     public ResponseResult addComment(Comment comment) {
-        return null;
+        //评论内容不能为空
+        if(!StringUtils.hasText(comment.getContent())){
+            throw new SystemException(AppHttpCodeEnum.CONTENT_NOT_NULL);
+        }
+        save(comment);
+        return ResponseResult.okResult();
     }
 
     private List<CommentVo> getChildren(Long id){

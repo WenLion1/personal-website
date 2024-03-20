@@ -1,5 +1,6 @@
 package com.zyaire.service;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zyaire.domain.ResponseResult;
 import com.zyaire.domain.entity.User;
 
 /**
@@ -10,4 +11,5 @@ import com.zyaire.domain.entity.User;
  */
 public interface UserService extends IService<User> {
 
+    ResponseResult userInfo();
 }
