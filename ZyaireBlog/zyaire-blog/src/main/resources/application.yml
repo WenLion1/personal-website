@@ -20,3 +20,8 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
       id-type: auto
+
+oss:
+  accessKey: ps8dRZfsuyE5lLazxae1RA-quj9Km3S2MtQTLHML
+  secretKey: HSvORkzVkEC706-W-ZafAt_YYSuc4Oskx63WTvyM
+  bucket: zy-blog-1
