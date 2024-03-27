@@ -1,5 +1,6 @@
 package com.zyaire.controller;
 
+import com.zyaire.annotation.SystemLog;
 import com.zyaire.domain.ResponseResult;
 import com.zyaire.domain.entity.User;
 import com.zyaire.service.UserService;
@@ -19,6 +20,7 @@ public class UserController {
     }
 
     @PutMapping("/userInfo")
+    @SystemLog(businessName = "更新用户信息")
     public ResponseResult updateUserInfo(@RequestBody User user){
         return userService.updateUserInfo(user);
     }
