@@ -15,6 +15,7 @@ import com.zyaire.mapper.ArticleMapper;
 import com.zyaire.service.ArticleService;
 import com.zyaire.service.CategoryService;
 import com.zyaire.utils.BeanCopyUtils;
+import com.zyaire.utils.RedisCache;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private RedisCache redisCache;
 
     // 查询热门文章
     @Override
@@ -85,5 +88,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
 
         return ResponseResult.okResult(articleDetailVo);
+    }
+
+    @Override
+    public ResponseResult updateViewCount(Long id) {
+        redisCache.incrementCacheMapValue("article:viewCount", id.toString(), 1);
+
+        return ResponseResult.okResult();
     }
 }
