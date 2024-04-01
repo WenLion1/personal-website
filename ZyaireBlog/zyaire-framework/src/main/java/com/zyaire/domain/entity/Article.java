@@ -58,5 +58,9 @@ public class Article{
     private Integer delFlag;
 
 
+    public Article(Long id, long viewCount) {
+        this.id = id;
+        this.viewCount = viewCount;
+    }
 }
 

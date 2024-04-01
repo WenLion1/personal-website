@@ -78,8 +78,8 @@ public class RedisCache
         return operation.get(key);
     }
 
-    public void incrementCacheMapValue(String key, String hKey, long v){
-        redisTemplate.opsForHash().increment(key, hKey, v);
+    public void incrementCacheMapValue(String key,String hKey,long v){
+        redisTemplate.boundHashOps(key).increment(hKey, v);
     }
 
     /**

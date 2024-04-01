@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
@@ -43,6 +44,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         page(page, queryWrapper);
 
         List<Article> articles = page.getRecords();
+        for (Article article : articles) {
+            Long id = article.getId();
+            Integer viewCount = redisCache.getCacheMapValue("article:viewCount", id.toString());
+            article.setViewCount(Long.valueOf(viewCount));
+        }
+
 //        List<HotArticleVo> articleVos = new ArrayList<>();
 //
 //        for (Article article : articles) {
@@ -67,6 +74,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         List<Article> articles = page.getRecords();
         for (Article article : articles) {
+            Long id = article.getId();
+            Integer viewCount = redisCache.getCacheMapValue("article:viewCount", id.toString());
+            article.setViewCount(Long.valueOf(viewCount));
+        }
+        for (Article article : articles) {
             Category byId = categoryService.getById(article.getCategoryId());
             article.setCategoryName(byId.getName());
         }
@@ -80,6 +92,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public ResponseResult getArticleDetail(Long id) {
         Article article = getById(id);
+
+        Integer viewCount = redisCache.getCacheMapValue("article:viewCount", id.toString());
+        article.setViewCount(Long.valueOf(viewCount));
+
         ArticleDetailVo articleDetailVo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
         Long categoryId = articleDetailVo.getCategoryId();
         Category byId = categoryService.getById(categoryId);
@@ -93,7 +109,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public ResponseResult updateViewCount(Long id) {
         redisCache.incrementCacheMapValue("article:viewCount", id.toString(), 1);
-
         return ResponseResult.okResult();
     }
 }
