@@ -38,19 +38,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-//关闭csrf
+                //关闭csrf
                 .csrf().disable()
-//不通过Session获取SecurityContext
+                //不通过Session获取SecurityContext
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-// 对于登录接口 允许匿名访问
-                .antMatchers("/user /login").anonymous()
+                // 对于登录接口 允许匿名访问
+                .antMatchers("/user/login").anonymous()
 //                .antMatchers("/logout").authenticated()
 //                .antMatchers("/user/userInfo").authenticated()
 //                .antMatchers("/upload").authenticated()
 //                .antMatchers("/article/hotArticleList").authenticated()
-// 除上面外的所有请求全部不需要认证即可访问
+                // 除上面外的所有请求全部不需要认证即可访问
                 .anyRequest().authenticated();
 
         http.exceptionHandling()
@@ -59,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.logout().disable();
 
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
-//允许跨域
+        //允许跨域
         http.cors();
     }
 }

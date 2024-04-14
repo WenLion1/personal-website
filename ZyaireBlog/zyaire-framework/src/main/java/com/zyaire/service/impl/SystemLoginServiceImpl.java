@@ -6,6 +6,7 @@ import com.zyaire.domain.entity.User;
 import com.zyaire.service.LoginService;
 import com.zyaire.utils.JwtUtil;
 import com.zyaire.utils.RedisCache;
+import com.zyaire.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,5 +38,12 @@ public class SystemLoginServiceImpl implements LoginService {
         Map<String, String> map = new HashMap<>();
         map.put("token", jwt);
         return ResponseResult.okResult(map);
+    }
+
+    @Override
+    public ResponseResult logout() {
+        Long userId = SecurityUtils.getUserId();
+        redisCache.deleteObject("login:" + userId);
+        return ResponseResult.okResult();
     }
 }

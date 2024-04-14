@@ -1,5 +1,7 @@
 package com.zyaire.service;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zyaire.domain.ResponseResult;
+import com.zyaire.domain.dto.TagListDto;
 import com.zyaire.domain.entity.Tag;
 
 /**
@@ -10,4 +12,7 @@ import com.zyaire.domain.entity.Tag;
  */
 public interface TagService extends IService<Tag> {
 
+    ResponseResult pageTagList(Integer pageNum, Integer pageSize, TagListDto tagListDto);
+
+    ResponseResult addTag(Tag tag);
 }

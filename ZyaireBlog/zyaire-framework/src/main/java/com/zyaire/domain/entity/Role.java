@@ -1,40 +1,43 @@
 package com.zyaire.domain.entity;
 import java.util.Date;
 import java.io.Serializable;
-
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 /**
- * 标签(Tag)表实体类
+ * 角色信息表(Role)表实体类
  *
  * @author makejava
- * @since 2024-04-08 19:51:22
+ * @since 2024-04-09 20:28:25
  */
 @SuppressWarnings("serial")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("zy_tag")
-public class Tag {
-    @TableId
+@TableName("sys_role")
+public class Role {
+//角色ID    @TableId
     private Long id;
-    //标签名
-    private String name;
-    @TableField(fill = FieldFill.INSERT)
+//角色名称    
+    private String roleName;
+//角色权限字符串    
+    private String roleKey;
+//显示顺序    
+    private Integer roleSort;
+//角色状态（0正常 1停用）    
+    private String status;
+//删除标志（0代表存在 1代表删除）    
+    private String delFlag;
+//创建者    
     private Long createBy;
-    @TableField(fill = FieldFill.INSERT)
+//创建时间    
     private Date createTime;
-    @TableField(fill = FieldFill.INSERT_UPDATE)
+//更新者    
     private Long updateBy;
-    @TableField(fill = FieldFill.INSERT_UPDATE)
+//更新时间    
     private Date updateTime;
-    //删除标志（0代表未删除，1代表已删除）
-    private Integer delFlag;
-    //备注
+//备注    
     private String remark;
 }
