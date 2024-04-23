@@ -15,4 +15,12 @@ public interface TagService extends IService<Tag> {
     ResponseResult pageTagList(Integer pageNum, Integer pageSize, TagListDto tagListDto);
 
     ResponseResult addTag(Tag tag);
+
+    ResponseResult deleteTag(Long id);
+
+    ResponseResult getTagById(Long id);
+
+    ResponseResult updateTag(Tag tag);
+
+    ResponseResult listAllTag();
 }
