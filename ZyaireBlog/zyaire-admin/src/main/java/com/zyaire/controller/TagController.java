@@ -7,6 +7,8 @@ import com.zyaire.service.TagService;
 import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -40,6 +42,7 @@ public class TagController {
     public ResponseResult updateTag(@RequestBody Tag tag){
         return tagService.updateTag(tag);
     }
+
 
     @GetMapping("/listAllTag")
     public ResponseResult listAllTag(){

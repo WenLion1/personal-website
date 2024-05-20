@@ -10,6 +10,7 @@ import com.zyaire.service.CategoryService;
 import com.zyaire.utils.BeanCopyUtils;
 import com.zyaire.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,7 @@ public class CategoryController {
         return categoryService.listAllCategory();
     }
 
+    @PreAuthorize("@ps.hasPermission('content:category:export')")
     @GetMapping("/export")
     public void export(HttpServletResponse response){
         try {

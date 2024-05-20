@@ -37,7 +37,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
 
         Page<Tag> page = new Page<>();
         page.setCurrent(pageNum);
-        page.setPages(pageNum);
+        page.setSize(pageSize);
         page(page, queryWrapper);
 
         PageVo pageVo = new PageVo(page.getRecords(), page.getTotal());
