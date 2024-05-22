@@ -170,4 +170,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         return ResponseResult.okResult();
     }
+
+    @Override
+    public ResponseResult deleteArticle(Long id) {
+        removeById(id);
+
+        return ResponseResult.okResult();
+    }
 }
