@@ -10,10 +10,7 @@ import com.zyaire.domain.dto.ArticleListDto;
 import com.zyaire.domain.entity.Article;
 import com.zyaire.domain.entity.ArticleTag;
 import com.zyaire.domain.entity.Category;
-import com.zyaire.domain.vo.ArticleDetailVo;
-import com.zyaire.domain.vo.ArticleListVo;
-import com.zyaire.domain.vo.HotArticleVo;
-import com.zyaire.domain.vo.PageVo;
+import com.zyaire.domain.vo.*;
 import com.zyaire.mapper.ArticleMapper;
 import com.zyaire.service.ArticleService;
 import com.zyaire.service.ArticleTagService;
@@ -146,5 +143,31 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         PageVo pageVo = new PageVo(page.getRecords(), page.getTotal());
         return ResponseResult.okResult(pageVo);
+    }
+
+    @Override
+    public ResponseResult updateArticleDetail(Long id) {
+        Article article = getById(id);
+
+        Integer viewCount = redisCache.getCacheMapValue("article:viewCount", id.toString());
+        article.setViewCount(Long.valueOf(viewCount));
+
+        UpdateArticleDetailVo updateArticleDetailVo = BeanCopyUtils.copyBean(article, UpdateArticleDetailVo.class);
+        List<Long> tagIdList = articleTagService.getTagIdList(id);
+        updateArticleDetailVo.setTags(tagIdList);
+
+        return ResponseResult.okResult(updateArticleDetailVo);
+    }
+
+    @Override
+    public ResponseResult updateArticle(UpdateArticleDetailVo updateArticleDetailVo) {
+        Long id = updateArticleDetailVo.getId();
+        Article article = BeanCopyUtils.copyBean(updateArticleDetailVo, Article.class);
+        updateById(article);
+
+        List<Long> tags = updateArticleDetailVo.getTags();
+        articleTagService.updateArticleTag(tags, id);
+
+        return ResponseResult.okResult();
     }
 }

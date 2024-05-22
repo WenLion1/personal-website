@@ -5,6 +5,7 @@ import com.zyaire.domain.ResponseResult;
 import com.zyaire.domain.dto.ArticleDto;
 import com.zyaire.domain.dto.ArticleListDto;
 import com.zyaire.domain.entity.Article;
+import com.zyaire.domain.vo.UpdateArticleDetailVo;
 
 public interface ArticleService extends IService<Article> {
     ResponseResult hotArticleList();
@@ -18,4 +19,8 @@ public interface ArticleService extends IService<Article> {
     ResponseResult addArticle(ArticleDto articleDto);
 
     ResponseResult pageArticleList(Integer pageNum, Integer pageSize, ArticleListDto articleListDto);
+
+    ResponseResult updateArticleDetail(Long id);
+
+    ResponseResult updateArticle(UpdateArticleDetailVo updateArticleDetailVo);
 }

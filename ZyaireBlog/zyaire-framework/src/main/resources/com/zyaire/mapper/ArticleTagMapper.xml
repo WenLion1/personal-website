@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyaire.mapper.ArticleTagMapper">
+
+    <delete id="deleteByArticleIdAndTagId">
+        delete from
+            zy_article_tag at
+        where
+            at.article_id = #{articleId} AND
+            at.tag_id = #{tagId}
+    </delete>
+
+    <select id="selectPermsByUserId" resultType="java.lang.String">
+        select
+            distinct m.perms
+        from
+            sys_user_role ur
+                LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id
+                LEFT JOIN sys_menu m on m.id = rm.menu_id
+        WHERE
+            ur.user_id = #{userId} AND
+            m.menu_type IN ('C', 'F') AND
+            m.status = 0 AND
+            m.del_flag = 0
+    </select>
+</mapper>
