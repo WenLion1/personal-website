@@ -1,5 +1,7 @@
 package com.zyaire.service;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zyaire.domain.ResponseResult;
+import com.zyaire.domain.dto.MenuListDto;
 import com.zyaire.domain.entity.Menu;
 
 import java.util.List;
@@ -15,4 +17,6 @@ public interface MenuService extends IService<Menu> {
     List<String> selectPermsByUserId(Long id);
 
     List<Menu> selectRouterMenuTreeByUserId(Long id);
+
+    ResponseResult getMenuList(MenuListDto menuListDto);
 }

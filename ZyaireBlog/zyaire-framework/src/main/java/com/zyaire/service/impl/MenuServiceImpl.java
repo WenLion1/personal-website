@@ -2,11 +2,16 @@ package com.zyaire.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zyaire.constants.SystemConstants;
+import com.zyaire.domain.ResponseResult;
+import com.zyaire.domain.dto.MenuListDto;
 import com.zyaire.domain.entity.Menu;
+import com.zyaire.domain.vo.MenuListVo;
 import com.zyaire.mapper.MenuMapper;
 import com.zyaire.service.MenuService;
+import com.zyaire.utils.BeanCopyUtils;
 import com.zyaire.utils.SecurityUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,6 +64,19 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         List<Menu> menuTree = builderMenuTree(menus, 0L);
 
         return menuTree;
+    }
+
+    @Override
+    public ResponseResult getMenuList(MenuListDto menuListDto) {
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(StringUtils.hasText(menuListDto.getMenuName()), Menu::getMenuName, menuListDto.getMenuName());
+        queryWrapper.eq(StringUtils.hasText(menuListDto.getStatus()), Menu::getStatus, menuListDto.getStatus());
+        queryWrapper.orderByAsc(Menu::getOrderNum);
+
+        List<Menu> menuList = list(queryWrapper);
+        List<MenuListVo> menuListVos = BeanCopyUtils.copyBeanList(menuList, MenuListVo.class);
+
+        return ResponseResult.okResult(menuListVos);
     }
 
     private List<Menu> builderMenuTree(List<Menu> menus, Long parentId) {
