@@ -12,6 +12,7 @@ import com.zyaire.utils.BeanCopyUtils;
 import com.zyaire.utils.SecurityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -77,6 +78,20 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         List<MenuListVo> menuListVos = BeanCopyUtils.copyBeanList(menuList, MenuListVo.class);
 
         return ResponseResult.okResult(menuListVos);
+    }
+
+    @Override
+    public ResponseResult addMenu(Menu menu) {
+        save(menu);
+
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult getMenuById(Long id) {
+
+
+        return null;
     }
 
     private List<Menu> builderMenuTree(List<Menu> menus, Long parentId) {
